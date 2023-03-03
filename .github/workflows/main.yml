@@ -1,0 +1,48 @@
+name: distcc-docker-images
+
+on:
+  push:
+    branches:
+      - '*'
+    paths-ignore:
+      - '**/README.md'
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  distcc-docker-images:
+    name: distcc:${{ matrix.images.image }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        images:
+        - image: fedora
+          tag: 'all'
+        - image: ubuntu
+          tag: 'all'
+        - image: debian
+          tag: 'all'
+        - image: archlinux
+          tag: 'all'
+        - image: manjaro
+          tag: 'all'
+        - image: alpine
+          tag: 'all'
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@v3.0.0
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install ninja-build distcc ccache cmake -y
+      - name: Build
+        run: make ${{ matrix.images.image }}
+      - name: Test
+        run: make ${{ matrix.images.image }}.test
+#      - name: Push
+#        if: github.ref == 'refs/heads/master'
+#        run: make ${{ matrix.images.image }}.push
