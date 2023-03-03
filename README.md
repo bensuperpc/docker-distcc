@@ -85,7 +85,7 @@ make debian.test
 | Archlinux | base-devel | bensuperpc/distcc:archlinux-base-devel |
 | Alpine | 3.17 | bensuperpc/distcc:alpine-3.17 |
 | Alpine | 3.16 | bensuperpc/distcc:alpine-3.16 |
-| Alpine | 3.15 | bensuperpc/distcc:alpine-3.15 |
+| Alpine | 3.15 | Not supported |
 | Fedora | 37 | bensuperpc/distcc:fedora-37 |
 | Fedora | 36 | bensuperpc/distcc:fedora-36 |
 | Fedora | 35 | bensuperpc/distcc:fedora-35 |

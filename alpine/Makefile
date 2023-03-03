@@ -1,5 +1,5 @@
 BASE_OS    := alpine
-BASE_IMAGE_TAGS := 3.15 3.16 3.17
+BASE_IMAGE_TAGS := 3.16 3.17
 
 AUTHOR := bensuperpc
 IMAGE_NAME := distcc
