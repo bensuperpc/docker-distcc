@@ -4,7 +4,7 @@ DOCKER := docker
 
 VERSION := 1.0.0
 
-.PHONY: all clean test $(SUBDIRS)
+.PHONY: clean test $(SUBDIRS)
 
 clean: $(SUBDIRS)
 	$(MAKE) -C $@ clean
@@ -19,5 +19,10 @@ test: $(SUBDIRS)
 $(addsuffix .test,$(SUBDIRS)): $$(basename $$@)
 	$(MAKE) -C $(basename $@) test
 
+.SECONDEXPANSION:
+$(addsuffix .push,$(SUBDIRS)): $$(basename $$@)
+	$(MAKE) -C $(basename $@) push
+
 push: $(SUBDIRS)
 	$(MAKE) -C $@ push
+

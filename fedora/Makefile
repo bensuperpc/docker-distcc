@@ -2,9 +2,7 @@ BASE_OS    := fedora
 BASE_IMAGE_TAGS := 35 36 37
 
 AUTHOR := bensuperpc
-
 IMAGE_NAME := distcc
-
 IMAGE := $(AUTHOR)/$(IMAGE_NAME)
 
 DOCKERFILE := Dockerfile
@@ -13,6 +11,8 @@ DOCKER := docker
 TAG := $(shell date '+%Y%m%d')-$(shell git rev-parse --short HEAD)
 DATE := $(shell date -u +"%Y-%m-%d")
 VERSION := 1.0.0
+
+.PHONY: all all.test push clean $(BASE_IMAGE_TAGS)
 
 all: $(BASE_IMAGE_TAGS)
 
@@ -24,6 +24,10 @@ all.push: $(addsuffix .push,$(BASE_IMAGE_TAGS))
 
 push: all.push
 
+all.pull: $(addsuffix .pull,$(BASE_IMAGE_TAGS))
+
+pull: all.pull
+
 $(BASE_OS): all
 
 $(BASE_IMAGE_TAGS):
@@ -34,9 +38,6 @@ $(BASE_IMAGE_TAGS):
 		-t $(IMAGE):$(BASE_OS) \
 		--build-arg BUILD_DATE=$(DATE) --build-arg DOCKER_IMAGE=$(BASE_OS):$@ \
 		--build-arg VERSION=$(VERSION)
-
-clean:
-	$(DOCKER) images --filter='reference=$(IMAGE)' --format='{{.Repository}}:{{.Tag}}' | xargs -r $(DOCKER) rmi -f
 
 .SECONDEXPANSION:
 $(addsuffix .test,$(BASE_IMAGE_TAGS)): $$(basename $$@)
@@ -56,9 +57,13 @@ $(addsuffix .test,$(BASE_IMAGE_TAGS)): $$(basename $$@)
 	rm -rf build-$(BASE_OS)-$(basename $@)
 	make -C ../test/make clean
 
-
 .SECONDEXPANSION:
 $(addsuffix .push,$(BASE_IMAGE_TAGS)): $$(basename $$@)
 	$(DOCKER) push $(IMAGE) --all-tags
 
-.PHONY: all push clean $(BASE_IMAGE_TAGS)
+$(addsuffix .pull,$(BASE_IMAGE_TAGS)): $$(basename $$@)
+	$(DOCKER) pull $(BASE_OS):$(basename $@)
+
+clean:
+	$(DOCKER) images --filter='reference=$(IMAGE)' --format='{{.Repository}}:{{.Tag}}' | xargs -r $(DOCKER) rmi -f
+

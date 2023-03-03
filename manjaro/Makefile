@@ -15,6 +15,8 @@ TAG := $(shell date '+%Y%m%d')-$(shell git rev-parse --short HEAD)
 DATE := $(shell date -u +"%Y-%m-%d")
 VERSION := 1.0.0
 
+.PHONY: all push clean $(BASE_IMAGE_TAGS)
+
 all: $(BASE_IMAGE_TAGS)
 
 all.test: $(addsuffix .test,$(BASE_IMAGE_TAGS))
@@ -24,6 +26,10 @@ test: all.test
 all.push: $(addsuffix .push,$(BASE_IMAGE_TAGS))
 
 push: all.push
+
+all.pull: $(addsuffix .pull,$(BASE_IMAGE_TAGS))
+
+pull: all.pull
 
 $(BASE_IMAGE): all
 
@@ -35,9 +41,6 @@ $(BASE_IMAGE_TAGS):
 		-t $(IMAGE):$(BASE_IMAGE_AUTHORS) \
 		--build-arg BUILD_DATE=$(DATE) --build-arg DOCKER_IMAGE=$(BASE_IMAGE):$@ \
 		--build-arg VERSION=$(VERSION)
-
-clean:
-	$(DOCKER) images --filter='reference=$(IMAGE)' --format='{{.Repository}}:{{.Tag}}' | xargs -r $(DOCKER) rmi -f
 
 .SECONDEXPANSION:
 $(addsuffix .test,$(BASE_IMAGE_TAGS)): $$(basename $$@)
@@ -62,4 +65,9 @@ $(addsuffix .test,$(BASE_IMAGE_TAGS)): $$(basename $$@)
 $(addsuffix .push,$(BASE_IMAGE_TAGS)): $$(basename $$@)
 	$(DOCKER) push $(IMAGE) --all-tags
 
-.PHONY: all push clean $(BASE_IMAGE_TAGS)
+.SECONDEXPANSION:
+$(addsuffix .pull,$(BASE_IMAGE_TAGS)): $$(basename $$@)
+	$(DOCKER) pull $(IMAGE):$(BASE_IMAGE_AUTHORS)-$@-$(TAG)
+
+clean:
+	$(DOCKER) images --filter='reference=$(IMAGE)' --format='{{.Repository}}:{{.Tag}}' | xargs -r $(DOCKER) rmi -f
