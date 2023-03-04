@@ -43,6 +43,8 @@ jobs:
         run: make ${{ matrix.images.image }}
       - name: Test
         run: make ${{ matrix.images.image }}.test
-#      - name: Push
-#        if: github.ref == 'refs/heads/master'
-#        run: make ${{ matrix.images.image }}.push
+      - name: "Push to hub.docker.com"
+        if: github.ref == 'refs/heads/main'
+        run: |
+            docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }}
+            run: make ${{ matrix.images.image }}.push
