@@ -10,7 +10,7 @@ clean: $(SUBDIRS)
 	$(MAKE) -C $@ clean
 
 $(SUBDIRS):
-	$(MAKE) -C $@ test VERSION="$(VERSION)"
+	$(MAKE) -C $@ VERSION="$(VERSION)"
 
 test: $(SUBDIRS)
 	$(MAKE) -C $@ test
