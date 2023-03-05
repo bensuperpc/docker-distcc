@@ -28,7 +28,7 @@ RUN pacman-key --init && pacman -Sy archlinux-keyring --noconfirm && pacman -Syu
   pacman -S --noconfirm \
   clang \
   ccache \
-  gcc \
+  base-devel \
   distcc \
   bash \
   && pacman -Scc --noconfirm

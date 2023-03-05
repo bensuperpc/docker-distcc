@@ -89,7 +89,7 @@ make debian.test
 | Fedora | 37 | bensuperpc/distcc:fedora-37 |
 | Fedora | 36 | bensuperpc/distcc:fedora-36 |
 | Fedora | 35 | bensuperpc/distcc:fedora-35 |
-| Manjaro | rolling | bensuperpc/distcc:manjaro-latest |
+| Manjaro | rolling | bensuperpc/distcc:manjarolinux-latest |
 | CentOS | 8 | Not supported |
 
 

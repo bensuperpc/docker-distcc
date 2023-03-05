@@ -25,10 +25,10 @@ LABEL org.label-schema.schema-version="1.0" \
 ENV LANG=en_US.utf8
 
 RUN apk add --no-cache \
-  distcc libstdc++ gcc g++ clang clang-dev openmp-dev \
-  ccache bash shadow
+  alpine-sdk clang-dev openmp-dev \
+  ccache bash shadow distcc
 
-RUN unset DISTCC_CMDLIST
+# RUN unset DISTCC_CMDLIST
 
 ENTRYPOINT [ \
   "distccd", \

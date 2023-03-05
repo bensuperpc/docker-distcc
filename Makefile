@@ -1,4 +1,4 @@
-SUBDIRS := debian ubuntu archlinux manjaro fedora alpine
+SUBDIRS := debian ubuntu archlinux manjarolinux fedora alpine
 
 DOCKER := docker
 

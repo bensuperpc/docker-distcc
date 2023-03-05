@@ -28,10 +28,19 @@ RUN pacman-key --init && pacman -Sy archlinux-keyring --noconfirm && pacman -Syu
   pacman -S --noconfirm \
   clang \
   ccache \
-  gcc \
-  distcc \
+  base-devel \
   bash \
   && pacman -Scc --noconfirm
+
+RUN git clone https://github.com/distcc/distcc.git && \
+  cd distcc && \
+  ./autogen.sh && \
+  ./configure && \
+  make && \
+  make install && \
+  update-distcc-symlinks && \
+  cd .. && \
+  rm -rf distcc
 
 ENTRYPOINT [ \
   "distccd", \
